@@ -1,163 +1,206 @@
-// Simple Calculator Application
-
-// Store the last operation performed
-let lastOperation = null;
-
-// Get all operation buttons
-const operationButtons = document.querySelectorAll('.op-btn');
-const num1Input = document.querySelector('#num1');
-const num2Input = document.querySelector('#num2');
-const resultDisplay = document.querySelector('#calc-result');
-
-// Initialize result display
-resultDisplay.textContent = '0';
-
 /**
- * Performs the calculation based on the operation
- * @param {number} num1 - First number
- * @param {number} num2 - Second number
- * @param {string} operation - Operation to perform (+, -, *, /)
- * @returns {number|string} Result of the calculation or error message
+ * Simple Calculator Application
+ * Handles basic arithmetic operations with keyboard support
  */
-function calculate(num1, num2, operation) {
-    try {
-        // Validate inputs
-        if (isNaN(num1) || isNaN(num2)) {
-            return 'Invalid input';
-        }
 
-        let result;
+(function() {
+    'use strict';
+
+    // State management
+    let lastOperation = null;
+    
+    // Cache DOM elements
+    const num1Input = document.querySelector('#num1');
+    const num2Input = document.querySelector('#num2');
+    const resultDisplay = document.querySelector('#calc-result');
+    const operationButtons = document.querySelectorAll('button[data-op]');
+    
+    /**
+     * Performs calculation based on the operation
+     * @param {number} a - First operand
+     * @param {number} b - Second operand
+     * @param {string} operation - Mathematical operation (+, -, *, /)
+     * @returns {number|string} Calculation result or error message
+     */
+    function calculate(a, b, operation) {
+        // Input validation
+        if (isNaN(a) || isNaN(b)) {
+            return 'Error: Invalid input';
+        }
+        
         switch(operation) {
             case '+':
-                result = num1 + num2;
-                break;
+                return a + b;
             case '-':
-                result = num1 - num2;
-                break;
+                return a - b;
             case '*':
-                result = num1 * num2;
-                break;
+                return a * b;
             case '/':
-                if (num2 === 0) {
-                    return 'Cannot divide by zero';
+                if (b === 0) {
+                    return 'Error: Division by zero';
                 }
-                result = num1 / num2;
-                break;
+                return a / b;
             default:
-                return 'Invalid operation';
+                return 'Error: Invalid operation';
         }
-
+    }
+    
+    /**
+     * Formats the result for display
+     * @param {number|string} result - Calculation result
+     * @returns {string} Formatted result
+     */
+    function formatResult(result) {
+        if (typeof result === 'string') {
+            return result; // Error message
+        }
+        
         // Round to 10 decimal places to avoid floating point issues
-        return Math.round(result * 10000000000) / 10000000000;
-    } catch (error) {
-        console.error('Calculation error:', error);
-        return 'Error';
-    }
-}
-
-/**
- * Updates the result display
- * @param {number|string} value - Value to display
- */
-function updateResult(value) {
-    resultDisplay.textContent = value.toString();
-    
-    // Add animation effect
-    resultDisplay.classList.remove('updated');
-    void resultDisplay.offsetWidth; // Trigger reflow
-    resultDisplay.classList.add('updated');
-}
-
-/**
- * Handles the calculation when an operation button is clicked
- * @param {string} operation - The operation to perform
- */
-function handleOperation(operation) {
-    const num1 = parseFloat(num1Input.value);
-    const num2 = parseFloat(num2Input.value);
-    
-    // Check if inputs are valid
-    if (num1Input.value === '' || num2Input.value === '') {
-        updateResult('Please enter both numbers');
-        return;
+        if (!Number.isInteger(result)) {
+            result = Math.round(result * 10000000000) / 10000000000;
+        }
+        
+        return result.toString();
     }
     
-    const result = calculate(num1, num2, operation);
-    updateResult(result);
+    /**
+     * Performs the calculation and updates the display
+     * @param {string} operation - Mathematical operation
+     */
+    function performCalculation(operation) {
+        const num1 = parseFloat(num1Input.value);
+        const num2 = parseFloat(num2Input.value);
+        
+        // Check if inputs are empty
+        if (num1Input.value === '' || num2Input.value === '') {
+            resultDisplay.textContent = 'Error: Please enter both numbers';
+            resultDisplay.classList.add('error');
+            return;
+        }
+        
+        const result = calculate(num1, num2, operation);
+        const formattedResult = formatResult(result);
+        
+        // Update display
+        resultDisplay.textContent = formattedResult;
+        
+        // Add error class if result is an error
+        if (typeof result === 'string' && result.startsWith('Error')) {
+            resultDisplay.classList.add('error');
+        } else {
+            resultDisplay.classList.remove('error');
+            lastOperation = operation; // Store last successful operation
+        }
+        
+        // Add animation
+        resultDisplay.classList.add('animate');
+        setTimeout(() => {
+            resultDisplay.classList.remove('animate');
+        }, 300);
+    }
     
-    // Store the last operation
-    lastOperation = {
-        num1: num1,
-        num2: num2,
-        operation: operation
-    };
-}
-
-// Add click event listeners to all operation buttons
-operationButtons.forEach(button => {
-    button.addEventListener('click', (e) => {
-        const operation = e.target.getAttribute('data-op');
-        handleOperation(operation);
+    /**
+     * Handles operation button clicks
+     * @param {Event} event - Click event
+     */
+    function handleOperationClick(event) {
+        const operation = event.currentTarget.getAttribute('data-op');
+        performCalculation(operation);
         
         // Visual feedback
-        e.target.classList.add('active');
+        event.currentTarget.classList.add('active');
         setTimeout(() => {
-            e.target.classList.remove('active');
+            event.currentTarget.classList.remove('active');
         }, 200);
-    });
-});
-
-// Add keyboard support for Enter key
-document.addEventListener('keydown', (e) => {
-    if (e.key === 'Enter') {
-        e.preventDefault();
+    }
+    
+    /**
+     * Handles keyboard events
+     * @param {KeyboardEvent} event - Keyboard event
+     */
+    function handleKeydown(event) {
+        // Enter key to repeat last operation
+        if (event.key === 'Enter') {
+            event.preventDefault();
+            
+            if (lastOperation) {
+                performCalculation(lastOperation);
+                
+                // Visual feedback for the corresponding button
+                const button = document.querySelector(`button[data-op="${lastOperation}"]`);
+                if (button) {
+                    button.classList.add('active');
+                    setTimeout(() => {
+                        button.classList.remove('active');
+                    }, 200);
+                }
+            } else {
+                resultDisplay.textContent = 'Error: No previous operation';
+                resultDisplay.classList.add('error');
+            }
+        }
         
-        // If there's a last operation, repeat it with current values
-        if (lastOperation) {
-            const num1 = parseFloat(num1Input.value) || lastOperation.num1;
-            const num2 = parseFloat(num2Input.value) || lastOperation.num2;
+        // Direct operation keys
+        const operationMap = {
+            '+': '+',
+            '-': '-',
+            '*': '*',
+            '/': '/'
+        };
+        
+        if (operationMap[event.key]) {
+            performCalculation(operationMap[event.key]);
             
-            // Update inputs if they were empty
-            if (num1Input.value === '') num1Input.value = lastOperation.num1;
-            if (num2Input.value === '') num2Input.value = lastOperation.num2;
-            
-            const result = calculate(num1, num2, lastOperation.operation);
-            updateResult(result);
-            
-            // Update last operation with new values
-            lastOperation.num1 = num1;
-            lastOperation.num2 = num2;
-            
-            // Highlight the last used operation button
-            const lastOpButton = document.querySelector(`button[data-op="${lastOperation.operation}"]`);
-            if (lastOpButton) {
-                lastOpButton.classList.add('active');
+            // Visual feedback
+            const button = document.querySelector(`button[data-op="${operationMap[event.key]}"]`);
+            if (button) {
+                button.classList.add('active');
                 setTimeout(() => {
-                    lastOpButton.classList.remove('active');
+                    button.classList.remove('active');
                 }, 200);
             }
-        } else {
-            updateResult('Please perform an operation first');
         }
     }
-});
-
-// Add input validation
-[num1Input, num2Input].forEach(input => {
-    input.addEventListener('input', (e) => {
-        // Allow only valid number input
-        const value = e.target.value;
-        if (value !== '' && value !== '-' && isNaN(parseFloat(value))) {
-            e.target.value = value.slice(0, -1);
-        }
-    });
-});
-
-// Clear result when inputs change
-[num1Input, num2Input].forEach(input => {
-    input.addEventListener('input', () => {
-        if (resultDisplay.textContent !== '0' && resultDisplay.textContent !== 'Please enter both numbers') {
-            resultDisplay.classList.remove('updated');
-        }
-    });
-});
+    
+    /**
+     * Initialize the calculator
+     */
+    function init() {
+        // Set initial result display
+        resultDisplay.textContent = '0';
+        
+        // Attach event listeners to operation buttons
+        operationButtons.forEach(button => {
+            button.addEventListener('click', handleOperationClick);
+        });
+        
+        // Attach keyboard event listener
+        document.addEventListener('keydown', handleKeydown);
+        
+        // Clear error state when typing in inputs
+        [num1Input, num2Input].forEach(input => {
+            input.addEventListener('input', () => {
+                resultDisplay.classList.remove('error');
+            });
+        });
+        
+        // Allow Enter key in input fields to trigger last operation
+        [num1Input, num2Input].forEach(input => {
+            input.addEventListener('keydown', (event) => {
+                if (event.key === 'Enter') {
+                    event.preventDefault();
+                    if (lastOperation) {
+                        performCalculation(lastOperation);
+                    }
+                }
+            });
+        });
+    }
+    
+    // Initialize when DOM is ready
+    if (document.readyState === 'loading') {
+        document.addEventListener('DOMContentLoaded', init);
+    } else {
+        init();
+    }
+})();

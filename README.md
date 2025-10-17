@@ -1,60 +1,77 @@
 # Simple Calculator
 
-A clean, modern web-based calculator application with keyboard support.
+## Overview
+A clean, modern web-based calculator application that performs basic arithmetic operations with keyboard support.
 
 ## Features
-
-- **Basic Operations**: Addition (+), Subtraction (-), Multiplication (×), and Division (÷)
-- **Keyboard Support**: Press Enter to repeat the last operation
-- **Input Validation**: Handles invalid inputs gracefully
-- **Responsive Design**: Works seamlessly on desktop and mobile devices
-- **Visual Feedback**: Animated results and button interactions
-- **Error Handling**: Proper handling of edge cases like division by zero
+- ✨ Basic arithmetic operations (addition, subtraction, multiplication, division)
+- ⌨️ Full keyboard support
+- 🎯 Press Enter to repeat the last operation
+- 📱 Responsive design for mobile and desktop
+- 🌙 Dark mode support (follows system preferences)
+- ♿ Accessibility-friendly with ARIA labels
+- 🎨 Modern, gradient-based UI with smooth animations
+- ⚡ Error handling for invalid inputs and division by zero
 
 ## Usage
 
+### Basic Operations
 1. Enter two numbers in the input fields
-2. Click one of the operation buttons (+, -, ×, ÷)
-3. View the result in the result display area
-4. Press Enter to repeat the last operation with current values
+2. Click one of the operation buttons (+, −, ×, ÷)
+3. View the result in the result display
+
+### Keyboard Shortcuts
+- **Enter**: Repeat the last successful operation
+- **+**: Perform addition
+- **-**: Perform subtraction
+- **\***: Perform multiplication
+- **/**: Perform division
 
 ## Technical Details
 
-### Structure
-- `index.html` - Main HTML structure with semantic elements
-- `script.js` - JavaScript logic for calculations and interactions
-- `style.css` - Modern, responsive styling with animations
+### Technologies Used
+- HTML5
+- CSS3 (with CSS Grid and Flexbox)
+- Vanilla JavaScript (ES6+)
 
 ### Key Features Implementation
-
-- **Last Operation Memory**: The calculator remembers the last operation performed
-- **Keyboard Support**: Enter key triggers the last operation
-- **Input Validation**: Only allows valid numeric input
-- **Floating Point Precision**: Rounds results to avoid floating point issues
-- **Accessibility**: Proper ARIA labels for screen readers
+- **State Management**: Tracks the last operation for Enter key functionality
+- **Error Handling**: Validates inputs and handles edge cases like division by zero
+- **Floating Point Precision**: Rounds results to 10 decimal places to avoid floating point issues
+- **Responsive Design**: Adapts layout for screens smaller than 480px
+- **Accessibility**: ARIA labels and live regions for screen reader support
+- **Performance**: Event delegation and efficient DOM manipulation
 
 ## Browser Compatibility
-
 - Chrome (latest)
 - Firefox (latest)
 - Safari (latest)
 - Edge (latest)
+- Mobile browsers (iOS Safari, Chrome Mobile)
+
+## Installation
+1. Clone or download the repository
+2. Open `index.html` in a web browser
+3. No build process or dependencies required!
 
 ## Deployment
+This application is designed to be deployed directly to GitHub Pages or any static hosting service.
 
-This application is ready for deployment to GitHub Pages or any static hosting service.
+## Error Handling
+- Invalid number inputs
+- Division by zero
+- Empty input fields
+- No previous operation for Enter key
 
-### GitHub Pages Deployment
-
-1. Push the code to a GitHub repository
-2. Go to Settings > Pages
-3. Select the branch and folder
-4. The app will be available at `https://[username].github.io/[repository-name]/`
-
-## Development
-
-No build process required. Simply open `index.html` in a web browser to run the application locally.
+## Future Enhancements
+- [ ] Operation history
+- [ ] Scientific calculator mode
+- [ ] Memory functions (M+, M-, MR, MC)
+- [ ] Calculation history export
+- [ ] Theme customization
 
 ## License
+MIT License - Feel free to use this calculator in your projects!
 
-MIT License - Feel free to use and modify as needed.
+## Author
+Created with ❤️ for modern web development

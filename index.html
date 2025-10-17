@@ -16,19 +16,19 @@
             </div>
             
             <div class="button-group">
-                <button data-op="+" class="op-btn" aria-label="Add">+</button>
-                <button data-op="-" class="op-btn" aria-label="Subtract">-</button>
-                <button data-op="*" class="op-btn" aria-label="Multiply">×</button>
-                <button data-op="/" class="op-btn" aria-label="Divide">÷</button>
+                <button data-op="+" class="btn btn-operation" aria-label="Add">+</button>
+                <button data-op="-" class="btn btn-operation" aria-label="Subtract">−</button>
+                <button data-op="*" class="btn btn-operation" aria-label="Multiply">×</button>
+                <button data-op="/" class="btn btn-operation" aria-label="Divide">÷</button>
             </div>
             
             <div class="result-container">
-                <h2>Result:</h2>
-                <div id="calc-result">0</div>
+                <label for="calc-result">Result:</label>
+                <div id="calc-result" role="status" aria-live="polite">0</div>
             </div>
             
-            <div class="help-text">
-                <p>Press Enter to repeat the last operation</p>
+            <div class="instructions">
+                <p>💡 Tip: Press Enter to repeat the last operation</p>
             </div>
         </div>
     </div>

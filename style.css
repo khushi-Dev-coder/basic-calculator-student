@@ -1,5 +1,4 @@
-/* Simple Calculator Styles */
-
+/* CSS Reset and Base Styles */
 * {
     margin: 0;
     padding: 0;
@@ -23,49 +22,46 @@ body {
 
 h1 {
     text-align: center;
-    color: white;
+    color: #ffffff;
     margin-bottom: 30px;
     font-size: 2rem;
     text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.2);
 }
 
 .calculator {
-    background: white;
+    background: #ffffff;
     border-radius: 20px;
     padding: 30px;
     box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
 }
 
+/* Input Styles */
 .input-group {
     display: flex;
-    gap: 10px;
-    margin-bottom: 20px;
+    gap: 15px;
+    margin-bottom: 25px;
 }
 
-input[type="number"] {
+#num1,
+#num2 {
     flex: 1;
     padding: 15px;
+    font-size: 1.1rem;
     border: 2px solid #e0e0e0;
     border-radius: 10px;
-    font-size: 1rem;
     transition: all 0.3s ease;
     background: #f8f9fa;
 }
 
-input[type="number"]:focus {
+#num1:focus,
+#num2:focus {
     outline: none;
     border-color: #667eea;
-    background: white;
-    transform: translateY(-2px);
-    box-shadow: 0 4px 12px rgba(102, 126, 234, 0.2);
+    background: #ffffff;
+    box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1);
 }
 
-input[type="number"]::-webkit-inner-spin-button,
-input[type="number"]::-webkit-outer-spin-button {
-    opacity: 1;
-    height: 40px;
-}
-
+/* Button Styles */
 .button-group {
     display: grid;
     grid-template-columns: repeat(4, 1fr);
@@ -73,60 +69,74 @@ input[type="number"]::-webkit-outer-spin-button {
     margin-bottom: 25px;
 }
 
-.op-btn {
+.btn {
     padding: 20px;
     font-size: 1.5rem;
     font-weight: bold;
     border: none;
     border-radius: 10px;
-    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-    color: white;
     cursor: pointer;
     transition: all 0.3s ease;
-    box-shadow: 0 4px 12px rgba(102, 126, 234, 0.3);
+    position: relative;
+    overflow: hidden;
 }
 
-.op-btn:hover {
-    transform: translateY(-3px);
-    box-shadow: 0 6px 20px rgba(102, 126, 234, 0.4);
+.btn-operation {
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    color: #ffffff;
 }
 
-.op-btn:active,
-.op-btn.active {
+.btn-operation:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 5px 15px rgba(102, 126, 234, 0.4);
+}
+
+.btn-operation:active,
+.btn-operation.active {
     transform: translateY(0);
-    box-shadow: 0 2px 8px rgba(102, 126, 234, 0.3);
-    background: linear-gradient(135deg, #764ba2 0%, #667eea 100%);
+    box-shadow: 0 2px 5px rgba(102, 126, 234, 0.4);
 }
 
+/* Result Display */
 .result-container {
-    background: #f8f9fa;
-    border-radius: 10px;
-    padding: 20px;
-    margin-bottom: 15px;
+    margin-bottom: 20px;
 }
 
-.result-container h2 {
-    font-size: 1rem;
-    color: #666;
+.result-container label {
+    display: block;
     margin-bottom: 10px;
+    color: #555;
+    font-weight: 600;
+    font-size: 0.9rem;
     text-transform: uppercase;
     letter-spacing: 1px;
 }
 
 #calc-result {
-    font-size: 2rem;
+    padding: 20px;
+    background: #f8f9fa;
+    border-radius: 10px;
+    font-size: 1.8rem;
     font-weight: bold;
+    text-align: right;
     color: #333;
-    word-wrap: break-word;
-    transition: all 0.3s ease;
-    min-height: 40px;
+    min-height: 60px;
     display: flex;
     align-items: center;
+    justify-content: flex-end;
+    border: 2px solid #e0e0e0;
+    transition: all 0.3s ease;
 }
 
-#calc-result.updated {
-    animation: pulse 0.5s ease;
-    color: #667eea;
+#calc-result.error {
+    color: #e74c3c;
+    background: #ffe6e6;
+    border-color: #e74c3c;
+    font-size: 1.2rem;
+}
+
+#calc-result.animate {
+    animation: pulse 0.3s ease;
 }
 
 @keyframes pulse {
@@ -141,11 +151,18 @@ input[type="number"]::-webkit-outer-spin-button {
     }
 }
 
-.help-text {
+/* Instructions */
+.instructions {
     text-align: center;
-    color: #999;
-    font-size: 0.85rem;
-    font-style: italic;
+    color: #666;
+    font-size: 0.9rem;
+    padding: 10px;
+    background: #f8f9fa;
+    border-radius: 10px;
+}
+
+.instructions p {
+    margin: 0;
 }
 
 /* Responsive Design */
@@ -158,32 +175,59 @@ input[type="number"]::-webkit-outer-spin-button {
         padding: 20px;
     }
     
+    .input-group {
+        flex-direction: column;
+        gap: 10px;
+    }
+    
     .button-group {
         grid-template-columns: repeat(2, 1fr);
     }
     
-    .op-btn {
+    .btn {
         padding: 15px;
-        font-size: 1.25rem;
+        font-size: 1.2rem;
     }
     
     #calc-result {
         font-size: 1.5rem;
+        padding: 15px;
     }
 }
 
-/* Loading animation for initial render */
-@keyframes fadeIn {
-    from {
-        opacity: 0;
-        transform: translateY(20px);
-    }
-    to {
-        opacity: 1;
-        transform: translateY(0);
+/* Accessibility */
+@media (prefers-reduced-motion: reduce) {
+    * {
+        animation: none !important;
+        transition: none !important;
     }
 }
 
-.container {
-    animation: fadeIn 0.5s ease;
+/* Dark mode support */
+@media (prefers-color-scheme: dark) {
+    body {
+        background: linear-gradient(135deg, #4a5568 0%, #2d3748 100%);
+    }
+    
+    .calculator {
+        background: #2d3748;
+        color: #e2e8f0;
+    }
+    
+    #num1,
+    #num2,
+    #calc-result {
+        background: #1a202c;
+        color: #e2e8f0;
+        border-color: #4a5568;
+    }
+    
+    .result-container label {
+        color: #a0aec0;
+    }
+    
+    .instructions {
+        background: #1a202c;
+        color: #a0aec0;
+    }
 }
